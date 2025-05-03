@@ -1,0 +1,49 @@
+pipeline {
+    agent any
+
+    tools {
+        jdk 'JDK_17' 
+        maven 'Maven_3.8.6' 
+    }
+
+    stages {
+        stage('Inicio') {
+            steps {
+                echo '🚀 Iniciando ejecución del pipeline...'
+            }
+        }
+
+        stage('Clonar') {
+            steps {
+                git 'https://github.com/MelissaPanduro/JenkinsDemo.git'
+            }
+        }
+
+        stage('Compilar') {
+            steps {
+                sh 'mvn clean compile'
+            }
+        }
+
+        stage('Test de Integración') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+
+        stage('Empaquetar') {
+            steps {
+                sh 'mvn package'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Pipeline ejecutado exitosamente.'
+        }
+        failure {
+            echo '❌ Algo falló en el pipeline.'
+        }
+    }
+}
